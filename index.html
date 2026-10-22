@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tehnička dokumentacija · moderni test</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(145deg, #f6f9fc 0%, #eef2f7 100%);
+      min-height: 100vh;
+      padding: 24px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 40px;
+      padding: 32px 36px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+      transition: all 0.2s ease;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #0a1e2f;
+      text-align: center;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    h1 i {
+      color: #2563eb;
+      font-size: 2rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #4b5e6b;
+      background: #e9f0f9;
+      display: inline-block;
+      padding: 8px 22px;
+      border-radius: 60px;
+      margin: 0 auto 28px;
+      letter-spacing: 0.3px;
+      backdrop-filter: blur(4px);
+    }
+
+    #timer-container {
+      position: sticky;
+      top: 16px;
+      background: linear-gradient(105deg, #0b2b40 0%, #1d4a6b 100%);
+      color: white;
+      padding: 16px 24px;
+      border-radius: 80px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      box-shadow: 0 12px 24px -10px rgba(0, 40, 70, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      letter-spacing: 0.5px;
+    }
+
+    #timer-container i {
+      font-size: 1.6rem;
+      opacity: 0.9;
+    }
+
+    #timer {
+      font-feature-settings: "tnum";
+      background: rgba(255, 255, 255, 0.15);
+      padding: 4px 14px;
+      border-radius: 40px;
+      font-weight: 700;
+    }
+
+    .question-card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 24px 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      transition: transform 0.15s ease, box-shadow 0.2s;
+    }
+
+    .question-card:hover {
+      box-shadow: 0 16px 28px -12px rgba(0, 50, 100, 0.18);
+    }
+
+    .question-title {
+      font-size: 1.18rem;
+      font-weight: 600;
+      color: #0a1e2f;
+      margin-bottom: 18px;
+      line-height: 1.45;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .question-title::before {
+      content: "?";
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #2563eb;
+      background: #e0edff;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      flex-shrink: 0;
+      margin-right: 4px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: flex-start;
+      padding: 14px 18px;
+      background: #f9fcff;
+      border: 1.5px solid #dfe8f2;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
+
+    .option-label:hover {
+      background: #eef6ff;
+      border-color: #2563eb;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 16px -10px #2563eb40;
+    }
+
+    .option-label input[type="radio"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #b6c8da;
+      border-radius: 50%;
+      margin-top: 2px;
+      margin-right: 15px;
+      flex-shrink: 0;
+      transition: all 0.15s;
+      position: relative;
+      background: white;
+    }
+
+    .option-label input[type="radio"]:checked {
+      border-color: #2563eb;
+      background: #2563eb;
+      box-shadow: 0 0 0 4px #2563eb20;
+    }
+
+    .option-label input[type="radio"]:checked::after {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    .option-text {
+      font-size: 0.98rem;
+      font-weight: 450;
+      color: #1a2c3b;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .option-text strong {
+      font-weight: 700;
+      color: #2563eb;
+      margin-right: 6px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 18px 28px;
+      background: #1e293b;
+      color: white;
+      border: none;
+      border-radius: 60px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 36px;
+      transition: all 0.2s ease;
+      box-shadow: 0 12px 24px -12px #1e293b80, 0 0 0 1px #ffffff30 inset;
+      border: 1px solid #ffffff30;
+    }
+
+    .submit-btn i {
+      font-size: 1.3rem;
+    }
+
+    .submit-btn:hover {
+      background: #0f172a;
+      transform: scale(1.01);
+      box-shadow: 0 18px 30px -14px #0f172a;
+    }
+
+    .restart-btn {
+      width: 100%;
+      padding: 18px 28px;
+      background: #ffffff;
+      color: #1e293b;
+      border: 2px solid #cbd5e1;
+      border-radius: 60px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 28px;
+      transition: all 0.2s ease;
+      background: #f8fafc;
+    }
+
+    .restart-btn i {
+      font-size: 1.2rem;
+    }
+
+    .restart-btn:hover {
+      background: #eef2f6;
+      border-color: #2563eb;
+      color: #2563eb;
+      transform: translateY(-2px);
+    }
+
+    #results {
+      display: none;
+      margin-top: 8px;
+    }
+
+    .score-box {
+      background: #ffffff;
+      border-radius: 32px;
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      box-shadow: 0 20px 35px -15px rgba(0, 50, 100, 0.2), 0 0 0 1px #ffffff inset;
+      border: 1px solid #d9e6f2;
+    }
+
+    .score-box h2 {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #0a1e2f;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .score-box h2 i {
+      color: #2563eb;
+      font-size: 1.8rem;
+    }
+
+    .score-details {
+      font-size: 1.1rem;
+      color: #1e3a5f;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px 40px;
+      background: #eef6fe;
+      padding: 20px 24px;
+      border-radius: 24px;
+      align-items: center;
+    }
+
+    .score-details p {
+      margin: 0;
+      font-weight: 500;
+    }
+
+    .score-details strong {
+      font-weight: 700;
+      color: #0a1e2f;
+      background: #ffffff;
+      padding: 4px 12px;
+      border-radius: 40px;
+      margin-left: 8px;
+      font-size: 1.1rem;
+      display: inline-block;
+      box-shadow: 0 2px 6px #00000008;
+    }
+
+    .grade-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: #ffffff;
+      padding: 10px 28px;
+      border-radius: 60px;
+      margin-left: auto;
+      box-shadow: 0 6px 14px -6px rgba(0,0,0,0.25);
+      letter-spacing: 0.5px;
+    }
+
+    .grade-badge i {
+      font-size: 1.3rem;
+    }
+
+    .grade-1 { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+    .grade-2 { background: linear-gradient(135deg, #f97316, #c2410c); }
+    .grade-3 { background: linear-gradient(135deg, #eab308, #a16207); }
+    .grade-4 { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+    .grade-5 { background: linear-gradient(135deg, #10b981, #047857); }
+
+    .review-card {
+      border-radius: 24px;
+      padding: 22px 24px;
+      margin-bottom: 18px;
+      background: #ffffff;
+      border: 1px solid #e2eaf2;
+      box-shadow: 0 4px 12px -6px rgba(0,0,0,0.04);
+      transition: all 0.15s;
+    }
+
+    .review-card.correct-card {
+      border-left: 6px solid #10b981;
+      background: #f5fef9;
+    }
+
+    .review-card.incorrect-card {
+      border-left: 6px solid #f97316;
+      background: #fffbf7;
+    }
+
+    .review-q-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #0f2638;
+      margin-bottom: 14px;
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+    }
+
+    .user-ans {
+      font-size: 0.98rem;
+      margin: 8px 0;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding-left: 4px;
+      color: #2b4052;
+    }
+
+    .user-ans.right {
+      color: #0b6b4b;
+      font-weight: 600;
+    }
+
+    .user-ans.wrong {
+      color: #b33a1b;
+      font-weight: 600;
+    }
+
+    .user-ans.unanswered {
+      color: #b45309;
+      font-weight: 600;
+    }
+
+    .user-ans i, .correct-ans i {
+      font-size: 1rem;
+      width: 22px;
+      text-align: center;
+    }
+
+    .correct-ans {
+      font-weight: 600;
+      color: #0b6b4b;
+      background: #e0f2e9;
+      padding: 10px 16px;
+      border-radius: 18px;
+      margin-top: 12px;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .correct-ans i {
+      color: #10b981;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 12px; }
+      .container { padding: 22px 18px; border-radius: 28px; }
+      h1 { font-size: 1.7rem; }
+      .question-card { padding: 20px 16px; }
+      .option-label { padding: 12px 14px; }
+      .score-details { flex-direction: column; gap: 12px; }
+      .grade-badge { margin-left: 0; width: 100%; justify-content: center; }
+    }
+
+    #quiz-screen, #results {
+      animation: fadeUp 0.4s ease-out;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>
+      <i class="fas fa-microchip"></i>
+      Tehnička dokumentacija
+    </h1>
+    <div class="subtitle">
+      <i class="fas fa-random" style="margin-right: 8px; color: #2563eb;"></i>
+      Test od 17  pitanja   | Vreme izrade: 9 minuta
+    </div>
+
+    <div id="quiz-screen">
+      <div id="timer-container">
+        <i class="fas fa-hourglass-half"></i>
+        <span>Preostalo vreme</span>
+        <span id="timer">09:00</span>
+      </div>
+
+      <form id="quiz-form">
+        <div id="questions-container"></div>
+        <button type="button" class="submit-btn" onclick="submitQuiz()">
+          <i class="fas fa-paper-plane"></i> Završi i predaj test
+        </button>
+      </form>
+    </div>
+
+    <div id="results">
+      <div class="score-box">
+        <h2><i class="fas fa-chart-simple"></i> Rezultati testa</h2>
+        <div class="score-details" id="score-summary"></div>
+      </div>
+      <h3 style="font-size: 1.4rem; font-weight: 600; color: #0a1e2f; margin-bottom: 18px; display: flex; align-items: center; gap: 8px;">
+        <i class="fas fa-list-check" style="color: #2563eb;"></i> Detaljan pregled odgovora
+      </h3>
+      <div id="review-container"></div>
+      <button class="restart-btn" onclick="location.reload()">
+        <i class="fas fa-rotate-right"></i> Pokreni novi test
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const rawQuestions = [
+      {
+        q: "Šta je tehnička dokumentacija?",
+        correct: "Skup crteža, opisa, tabela i podataka koji prikazuju kako se nešto projektuje, izrađuje, sklapa, koristi ili održava.",
+        distractors: [
+          "Skup dokumenata koji prati samo finansijsko poslovanje preduzeća tokom izrade proizvoda.",
+          "Spisak zaposlenih i njihovih radnih zadataka u proizvodnom pogonu, bez tehničkih crteža.",
+          "Kolekcija promotivnih materijala i uputstava za kupce, bez podataka o izradi i sklapanju."
+        ]
+      },
+      {
+        q: "Koja je svrha tehničke dokumentacije?",
+        correct: "Omogućavanje preciznog izvođenja i kontrole tehničkih radova, kao i komunikacija između inženjera, tehničara i proizvođača.",
+        distractors: [
+          "Omogućavanje preciznog obračuna troškova izrade i formiranja prodajne cene proizvoda.",
+          "Evidentiranje radnog vremena zaposlenih i praćenje njihove produktivnosti na projektu.",
+          "Prikazivanje tržišnog udela kompanije i planova za plasiranje proizvoda na novo tržište."
+        ]
+      },
+      {
+        q: "Koji su osnovni elementi tehničke dokumentacije?",
+        correct: "Crteži, tehnički opisi, spiskovi delova, standardi i uputstva za upotrebu.",
+        distractors: [
+          "Crteži, finansijski izveštaji, ugovori o radu i platne liste zaposlenih.",
+          "Tehnički opisi, katalog proizvoda, cenovnik usluga i reklamni posteri.",
+          "Spiskovi delova, radni nalozi, evidencija radnih sati i putni troškovi."
+        ]
+      },
+      {
+        q: "Koji je glavni cilj tehničke dokumentacije?",
+        correct: "Obezbeđivanje tačnosti, razumljivosti i ponovljivosti u izradi proizvoda.",
+        distractors: [
+          "Obezbeđivanje što niže cene izrade uz zanemarivanje tačnosti dimenzija.",
+          "Obezbeđivanje što brže izrade uz izostavljanje kontrole i testiranja proizvoda.",
+          "Obezbeđivanje što veće proizvodnje uz nepotpunu dokumentaciju i bez standarda."
+        ]
+      },
+      {
+        q: "Koji su alati za izradu tehničke dokumentacije?",
+        correct: "Ručni (lenjir, šestar, trougao) ili softverski (AutoCAD, Word, Excel, Visio).",
+        distractors: [
+          "Ručni (čekić, odvijač, klješta) ili mašinski (strug, glodalica, bušilica).",
+          "Softverski (Word, Excel, PowerPoint) ili mrežni (ruter, svič, modem).",
+          "Merni (multimetar, osciloskop) ili dijagnostički (skener, senzor, tester)."
+        ]
+      },
+      {
+        q: "U tehničkoj dokumentaciji, čemu služi šema?",
+        correct: "Za prikaz povezivanja elemenata u električnom ili mašinskom sistemu na jednostavan i pregledan način.",
+        distractors: [
+          "Za prikaz tačnih dimenzija i težine svih upotrebljenih materijala u realnoj razmeri.",
+          "Za proračun ukupnih troškova izrade pojedinačnih sklopova u proizvodnom procesu.",
+          "Za definisanje redosleda radnih smena i rasporeda dužnosti zaposlenih u radionici."
+        ]
+      },
+      {
+        q: "Šta znači pojam standarda?",
+        correct: "Dokument koji propisuje pravila, oznake, simbole i postupke kako bi se postigla ujednačenost i lakša komunikacija u struci.",
+        distractors: [
+          "Dokument koji propisuje maksimalnu prodajnu cenu proizvoda na domaćem tržištu opreme.",
+          "Dokument koji opisuje optimalan način organizacije radnog prostora i raspored stolova.",
+          "Dokument koji definiše visinu zarada i radnih obaveza zaposlenih u proizvodnji."
+        ]
+      },
+      {
+        q: "Koja organizacija donosi međunarodne standarde u elektrotehnici?",
+        correct: "IEC (International Electrotechnical Commission).",
+        distractors: [
+          "ISO (International Organization for Standardization) – organizacija za opšte standarde.",
+          "IEEE (Institute of Electrical and Electronics Engineers) – stručno udruženje inženjera.",
+          "CENELEC (European Committee for Electrotechnical Standardization) – evropski komitet."
+        ]
+      },
+      {
+        q: "Na šta se odnosi IEC standard?",
+        correct: "Na simbole, oznake i tehničke zahteve za električne i elektronske uređaje.",
+        distractors: [
+          "Na simbole, oznake i tehničke zahteve za građevinske objekte i konstrukcije.",
+          "Na simbole, oznake i tehničke zahteve za prehrambene proizvode i pakovanje.",
+          "Na simbole, oznake i tehničke zahteve za saobraćajnu signalizaciju i puteve."
+        ]
+      },
+      {
+        q: "Kako izgleda simbol za otpornik u šemi?",
+        correct: "Nazubljena linija ili pravougaonik koji predstavlja električni otpor u kolu.",
+        distractors: [
+          "Dve paralelne linije koje predstavljaju ploče kondenzatora sa izolatorom između njih.",
+          "Krug sa strelicom koja označava promenljivi otpor (potenciometar).",
+          "Linija sa prekidom koja označava prekidač u strujnom kolu."
+        ]
+      },
+      {
+        q: "Kako izgleda simbol za bateriju?",
+        correct: "Niz paralelnih linija različite dužine – duža označava pozitivan, kraća negativan pol.",
+        distractors: [
+          "Krug sa naizmeničnim talasom unutra koji označava izvor naizmenične struje.",
+          "Dve paralelne linije iste dužine koje označavaju kondenzator u kolu.",
+          "Strelica koja pokazuje smer toka struje kroz provodnik."
+        ]
+      },
+      {
+        q: "Kako izgleda simbol za uzemljenje?",
+        correct: "Nekoliko linija koje se sužavaju prema dole i označavaju povezivanje sa zemljom radi bezbednosti.",
+        distractors: [
+          "Nekoliko linija koje se sužavaju prema gore i označavaju priključak na napajanje.",
+          "Trougao sa uzvičnikom u sredini koji upozorava na visoku vrednost napona.",
+          "Kvadrat sa dijagonalno precrtanim linijama koje označavaju prekid strujnog kola."
+        ]
+      },
+      {
+        q: "Šta predstavlja projekat?",
+        correct: "Plan koji opisuje kako će se neki zadatak ili proizvod realizovati, sa svim fazama i resursima.",
+        distractors: [
+          "Završni izveštaj koji prikazuje ostvarene prihode i rashode nakon završetka proizvodnje.",
+          "Spisak opreme i alata koji se trenutno nalaze na lageru i čekaju na upotrebu.",
+          "Ugovor između kupca i prodavca kojim se definiše cena gotovog tehničkog uređaja."
+        ]
+      },
+      {
+        q: "Koje su osnovne faze projekta?",
+        correct: "Planiranje, izrada, kontrola, testiranje i završna dokumentacija.",
+        distractors: [
+          "Planiranje, kupovina, prodaja, reklamiranje i arhiviranje računa.",
+          "Zapošljavanje, obuka, raspodela posla, merenje radnog vremena i otkaz.",
+          "Nabavka sirovina, transport, skladištenje, izlaganje i konačna prodaja."
+        ]
+      },
+      {
+        q: "Šta podrazumeva upravljanje projektom?",
+        correct: "Organizovanje, planiranje, nadzor i kontrolu aktivnosti kako bi se projekat uspešno realizovao.",
+        distractors: [
+          "Isključivo vođenje knjigovodstva i obračun plata zaposlenih na projektu.",
+          "Direktnu fizičku izradu svih delova i sklopova od strane vođe projekta.",
+          "Kupovinu najnovijih softverskih alata bez obzira na budžet i potrebe projekta."
+        ]
+      },
+      {
+        q: "Koji je cilj upravljanja projektom?",
+        correct: "Da se projekat završi u predviđenom roku, uz planirane troškove i odgovarajući kvalitet.",
+        distractors: [
+          "Da se projekat završi što pre, čak i po ceni smanjenja kvaliteta i bez kontrole.",
+          "Da se projekat završi bez obzira na prekoračenje roka i planiranog budžeta.",
+          "Da se projekat završi uz maksimalno angažovanje resursa bez obzira na isplativost."
+        ]
+      },
+      {
+        q: "Koji je prvi korak u izradi tehničke dokumentacije?",
+        correct: "Prikupljanje podataka i definisanje zahteva i ciljeva samog projekta.",
+        distractors: [
+          "Crtanje konačnih radioničkih crteža sa svim dimenzijama i tolerancijama.",
+          "Izrada spiska materijala i kupovina kompletnog materijala za izradu.",
+          "Štampanje uputstva za upotrebu i pakovanje tehničkog uređaja u kutije."
+        ]
+      },
+      {
+        q: "Šta predstavlja idejno rešenje?",
+        correct: "Prvu skicu ili koncept koji prikazuje kako bi neko tehničko rešenje moglo da izgleda i funkcioniše.",
+        distractors: [
+          "Konačan radionički crtež sa svim detaljnim dimenzijama i tolerancijama obrade.",
+          "Detaljan spisak troškova izrade i plata radnika angažovanih na projektu.",
+          "Završni zapisnik o ispitivanju funkcionalnosti već napravljenog prototipa."
+        ]
+      },
+      {
+        q: "Koliko priključaka ima tranzistor?",
+        correct: "Tri priključka – bazu, kolektor i emiter.",
+        distractors: [
+          "Dva priključka – anodu i katodu, kao kod diode.",
+          "Četiri priključka – ulaz, izlaz, napajanje i masu, kao kod integrisanog kola.",
+          "Jedan priključak – samo upravljačku elektrodu, kao kod tiristora."
+        ]
+      },
+      {
+        q: "Šta sadrži projektna dokumentacija?",
+        correct: "Sve delove projekta – idejno rešenje, opise, crteže i odgovarajuće proračune.",
+        distractors: [
+          "Samo idejno rešenje, bez opisa, crteža i proračuna potrebnih za izradu.",
+          "Samo radioničke crteže, bez idejnog rešenja, opisa i proračuna.",
+          "Samo tekstualne opise, bez crteža i proračuna potrebnih za izradu."
+        ]
+      },
+      {
+        q: "Kako izgleda simbol kondenzatora u šemi?",
+        correct: "Dve paralelne linije koje predstavljaju ploče između kojih se nalazi izolator.",
+        distractors: [
+          "Cik-cak linija koja označava otpor prolasku električne struje u kolu.",
+          "Krug sa strelicom koja označava promenljivi otpor (potenciometar).",
+          "Niz paralelnih linija različite dužine koje označavaju izvor jednosmerne struje."
+        ]
+      },
+      {
+        q: "Koji je cilj primene standarda?",
+        correct: "Obezbeđivanje kvaliteta, bezbednosti i međusobne zamenljivosti delova i proizvoda.",
+        distractors: [
+          "Povećanje kompleksnosti proizvodnje kako bi se sprečilo kopiranje uređaja.",
+          "Ograničavanje upotrebe savremenih softverskih alata u izradi dokumentacije.",
+          "Povećanje vremena potrebnog za izradu tehničkih crteža i specifikacija."
+        ]
+      },
+      {
+        q: "Ko u Srbiji odobrava primenu standarda?",
+        correct: "Institut za standardizaciju Srbije (ISS).",
+        distractors: [
+          "Ministarstvo prosvete, nauke i tehnološkog razvoja.",
+          "Privredna komora Srbije (PKS).",
+          "Republički zavod za statistiku (RZS)."
+        ]
+      },
+      {
+        q: "Ko čini projektni tim?",
+        correct: "Inženjeri, tehničari, dizajneri i menadžeri koji zajedno sprovode projekat.",
+        distractors: [
+          "Inženjeri, tehničari, dizajneri i radnici u proizvodnji koji sklapaju delove.",
+          "Menadžeri, pravnici, ekonomisti i spoljni savetnici za finansije.",
+          "Kupci, distributeri, prodavci i radnici u službi reklamacija uređaja."
+        ]
+      },
+      {
+        q: "Šta sadrži tehnički opis?",
+        correct: "Tekstualno objašnjenje rešenja, primenjenih materijala i samog postupka izrade.",
+        distractors: [
+          "Tekstualno objašnjenje finansijskih troškova i očekivane dobiti od proizvoda.",
+          "Grafički prikaz logotipa kompanije i promotivni tekst namenjen kupcima.",
+          "Tabelarni pregled svih izostanaka zaposlenih tokom izrade projekta."
+        ]
+      },
+      {
+        q: "Zašto se vrši kontrola projekta?",
+        correct: "Da bi se proverilo da li se projekat izvodi prema planu i tehničkim standardima.",
+        distractors: [
+          "Da bi se proverilo da li su troškovi izrade ostali u okviru predviđenog budžeta.",
+          "Da bi se proverilo da li su rokovi izrade produženi u odnosu na početni plan.",
+          "Da bi se proverilo da li je broj angažovanih radnika dovoljan za završetak."
+        ]
+      },
+      {
+        q: "Koji se resursi koriste tokom izrade projekta?",
+        correct: "Ljudi, materijali, vreme, alati i finansijska sredstva (novac).",
+        distractors: [
+          "Ljudi, materijali, vreme i alati, dok finansijska sredstva nisu resurs.",
+          "Samo materijali, alati i mašine, dok ljudi i vreme nisu resursi.",
+          "Samo finansijska sredstva i vreme, dok materijali i alati nisu resursi."
+        ]
+      },
+      {
+        q: "Šta se dobija primenom standarda?",
+        correct: "Ujednačenost i preciznost u tehničkom radu i međusobnoj komunikaciji.",
+        distractors: [
+          "Veća sloboda inženjera da odstupaju od zadatih dimenzija proizvoda.",
+          "Znatno viša cena izrade zbog komplikovanijih administrativnih procedura.",
+          "Smanjenje potrebe za proverom ispravnosti izrađenih tehničkih sklopova."
+        ]
+      },
+      {
+        q: "Koja je jedinica za napon u elektrotehnici?",
+        correct: "Volt (V).",
+        distractors: [
+          "Amper (A) ",
+          "Ohm (Ω) .",
+          "Watt (W) "
+        ]
+      },
+      {
+        q: "Koja je oznaka za jednosmernu struju?",
+        correct: "DC (Direct Current).",
+        distractors: [
+          "AC (Alternating Current) ",
+          "Hz (Hertz) ",
+          "UV (Ultra Violet) "
+        ]
+      },
+      {
+        q: "Koja je oznaka za naizmeničnu struju?",
+        correct: "AC (Alternating Current).",
+        distractors: [
+          "DC (Direct Current) ",
+          "NC (No Connection) ",
+          "GND (Ground)"
+        ]
+      },
+      {
+        q: "Kakva mora biti tehnička dokumentacija?",
+        correct: "Jasna, uredna, čitljiva i tehnički potpuno tačna.",
+        distractors: [
+          "Kratka, opšta, procenjena i sklona čestim izmenama.",
+          "Opširna, rečita, umetnički ukrašena i sažeta.",
+          "Napisana u slobodnoj formi bez korišćenja standardnih simbola."
+        ]
+      },
+      {
+        q: "Koji je jedan od glavnih ciljeva projektovanja?",
+        correct: "Dobijanje tehnički ispravnog, ekonomičnog i bezbednog rešenja.",
+        distractors: [
+          "Izrada što komplikovanijeg crteža koji samo stručnjaci razumeju.",
+          "Upotreba najskupljih dostupnih materijala bez obzira na potrebu.",
+          "Ubrzanje procesa izrade ukidanjem faze testiranja sigurnosti."
+        ]
+      },
+      {
+        q: "Šta prikazuje nacrt u tehničkoj dokumentaciji?",
+        correct: "Grafički prikaz tehničkog rešenja sa svim potrebnim kótama i detaljima.",
+        distractors: [
+          "Samo tekstualni opis bez ikakvih slikovnih ili grafičkih elemenata.",
+          "Grafički prikaz bez kóta i detalja, samo sa osnovnim oblikom rešenja.",
+          "Pregled troškova nabavke sirovina i alata potrebnih za izradu."
+        ]
+      }
+    ];
+
+    let selectedQuestions = [];
+    let timerInterval = null;
+    let timeLeft = 9 * 60;
+
+    function shuffle(array) {
+      let currentIndex = array.length, randomIndex;
+      while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+      }
+      return array;
+    }
+
+    function calculateGrade(percentage) {
+      const p = parseFloat(percentage);
+      if (p < 50) return { grade: 1, label: "Nedovoljan", className: "grade-1", icon: "fa-face-frown" };
+      if (p < 60) return { grade: 2, label: "Dovoljan", className: "grade-2", icon: "fa-face-meh" };
+      if (p < 70) return { grade: 3, label: "Dobar", className: "grade-3", icon: "fa-face-smile" };
+      if (p < 85) return { grade: 4, label: "Vrlo dobar", className: "grade-4", icon: "fa-face-grin" };
+      return { grade: 5, label: "Odličan", className: "grade-5", icon: "fa-face-grin-stars" };
+    }
+
+    function initQuiz() {
+      let shuffledQuestions = shuffle([...rawQuestions]);
+      selectedQuestions = shuffledQuestions.slice(0, 17);
+
+      const container = document.getElementById('questions-container');
+      container.innerHTML = '';
+
+      selectedQuestions.forEach((qObj, index) => {
+        let optionsList = [
+          { text: qObj.correct, isCorrect: true },
+          { text: qObj.distractors[0], isCorrect: false },
+          { text: qObj.distractors[1], isCorrect: false },
+          { text: qObj.distractors[2], isCorrect: false }
+        ];
+
+        optionsList = shuffle(optionsList);
+        qObj.shuffledOptions = optionsList;
+
+        const qCard = document.createElement('div');
+        qCard.className = 'question-card';
+
+        let qHTML = `<div class="question-title">${index + 1}. ${qObj.q}</div>`;
+        qHTML += `<div class="options">`;
+
+        const letters = ['a', 'b', 'c', 'd'];
+        optionsList.forEach((opt, optIndex) => {
+          const letter = letters[optIndex];
+          qHTML += `
+            <label class="option-label">
+              <input type="radio" name="q_${index}" value="${letter}">
+              <span class="option-text"><strong>${letter})</strong> ${opt.text}</span>
+            </label>
+          `;
+        });
+
+        qHTML += `</div>`;
+        qCard.innerHTML = qHTML;
+        container.appendChild(qCard);
+      });
+
+      startTimer();
+    }
+
+    function startTimer() {
+      const timerDisplay = document.getElementById('timer');
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+
+        timerDisplay.textContent = `${minutes}:${seconds}`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          alert('Vreme za izradu testa je isteklo!');
+          submitQuiz();
+        }
+      }, 1000);
+    }
+
+    function submitQuiz() {
+      clearInterval(timerInterval);
+
+      let score = 0;
+      const total = selectedQuestions.length;
+      const letters = ['a', 'b', 'c', 'd'];
+      const reviewContainer = document.getElementById('review-container');
+      reviewContainer.innerHTML = '';
+
+      selectedQuestions.forEach((qObj, index) => {
+        const selectedRadio = document.querySelector(`input[name="q_${index}"]:checked`);
+        let userLetter = selectedRadio ? selectedRadio.value : null;
+
+        let correctLetter = '';
+        let correctText = '';
+        qObj.shuffledOptions.forEach((opt, optIndex) => {
+          if (opt.isCorrect) {
+            correctLetter = letters[optIndex];
+            correctText = opt.text;
+          }
+        });
+
+        let userText = '';
+        if (userLetter) {
+          let userOptIndex = letters.indexOf(userLetter);
+          userText = qObj.shuffledOptions[userOptIndex].text;
+        }
+
+        const isCorrect = (userLetter === correctLetter);
+        if (isCorrect) score++;
+
+        const reviewCard = document.createElement('div');
+        reviewCard.className = `review-card ${isCorrect ? 'correct-card' : 'incorrect-card'}`;
+
+        let reviewHTML = `<div class="review-q-title"><i class="fas fa-circle-question" style="color:#2563eb;"></i> ${index + 1}. ${qObj.q}</div>`;
+
+        if (isCorrect) {
+          reviewHTML += `<div class="user-ans right"><i class="fas fa-circle-check"></i> Vaš odgovor je tačan: (${userLetter}) ${userText}</div>`;
+        } else {
+          if (userLetter) {
+            reviewHTML += `<div class="user-ans wrong"><i class="fas fa-circle-xmark"></i> Vaš odgovor: (${userLetter}) ${userText}</div>`;
+          } else {
+            reviewHTML += `<div class="user-ans unanswered"><i class="fas fa-triangle-exclamation"></i> Niste odgovorili na ovo pitanje.</div>`;
+          }
+          reviewHTML += `<div class="correct-ans"><i class="fas fa-circle-check"></i> Tačan odgovor: (${correctLetter}) ${correctText}</div>`;
+        }
+
+        reviewCard.innerHTML = reviewHTML;
+        reviewContainer.appendChild(reviewCard);
+      });
+
+      const percentage = ((score / total) * 100).toFixed(2);
+      const gradeInfo = calculateGrade(percentage);
+
+      document.getElementById('score-summary').innerHTML = `
+        <p><i class="fas fa-check-circle" style="color:#10b981; margin-right:8px;"></i>Tačnih: <strong>${score} / ${total}</strong></p>
+        <p><i class="fas fa-times-circle" style="color:#f97316; margin-right:8px;"></i>Grešaka: <strong>${total - score}</strong></p>
+        <p><i class="fas fa-chart-line" style="color:#2563eb; margin-right:8px;"></i>Uspešnost: <strong>${percentage}%</strong></p>
+        <div class="grade-badge ${gradeInfo.className}" title="${gradeInfo.label}">
+          <i class="fas ${gradeInfo.icon}"></i> Ocena: ${gradeInfo.grade}
+        </div>
+      `;
+
+      document.getElementById('quiz-screen').style.display = 'none';
+      document.getElementById('results').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.onload = initQuiz;
+  </script>
+</body>
+</html>
